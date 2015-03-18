@@ -41,26 +41,23 @@
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                    <span class="sr-only">Pomodoro Toggle</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="/">Pomodoro Navigation</a>
+                <a class="navbar-brand" href="/">Pomegranate</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
-                    <li>
+                
+                <div data-ng-controller="apiController" data-ng-init="checkLogin()">
+                
+                <ul class="nav navbar-nav pull-right">
+                    <li ng-show="!authStatus" class="ng-hide">
                         <a href="#" data-toggle="modal" data-target=".bs-login-modal">Login</a>
                     </li>
-                    <li>
-                        <a href="/timer">Timer</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact</a>
+
+                    <li ng-show="authStatus" class="ng-hide">
+                        <a href="#" ng-click="logout()" >Logout</a>
                     </li>
                 </ul>
+                </div>
             </div>
             <!-- /.navbar-collapse -->
         </div>
@@ -70,10 +67,45 @@
     <div class="container">
 
         <div class="row">
+            <div class="col-md-4 hidden-sm hidden-xs bg-warning">
+                Over1
+            </div>
+            <div class="col-md-6 bg-info">
+                <!-- ANGULAR VIEW -->
+                <div data-ng-controller="timerController" data-ng-init="init()">
+                    <div class="timer-select">
+                        <button ng-click="setTimer('ST')" ng-disabled="timerRunning">Study</button>
+                        <button ng-click="setTimer('SB')" ng-disabled="timerRunning">Short Break</button>
+                        <button ng-click="setTimer('LB')" ng-disabled="timerRunning">Long Break</button>
+                    </div>
+                    <div class="timer-box">
+                        <div ng-switch on="timer_type">
+                            <div ng-switch-when="ST">
+                                <timer countdown="1500" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
+                            </div>
+                            <div ng-switch-when="SB">
+                                <timer countdown="300" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
+                            </div>
+                            <div ng-switch-when="LB">
+                                <timer countdown="1800" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
+                            </div>
+                        </div>
+
+                        <button ng-click="startTimer()" ng-hide="timerRunning">Start Timer</button>
+                        <button ng-click="resetTimer()" ng-hide="!timerRunning">Reset Timer</button>
+                    </div>
+                    
+                    <div ng-controller="apiController">
+                    <button ng-click="timerJson()">GET Timer</button>
+                    {{timerData}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 hidden-sm hidden-xs bg-success">
+                over2
+            </div>
         
-            <!-- ANGULAR VIEW -->
-            <div data-ng-view></div>
-        
+            
         </div>
         <!-- /.row -->
 

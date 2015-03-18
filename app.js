@@ -1,21 +1,9 @@
-var app = angular.module('app', ['ngRoute','ngCookies','timer']);
+var app = angular.module('app', ['ngCookies','timer']);
 app.value('apiURI', 'http://127.0.0.1:8000');
 
 // APP Configurations
-app.config(['$routeProvider','$locationProvider','$httpProvider',
-	function ($routeProvider,$locationProvider,$httpProvider){
-		$routeProvider.
-				when('/statics',{
-					templateUrl: 'view/statics.html',
-					controller: 'viewController'
-				})
-				.when('/timer',{
-					templateUrl: 'view/timer.html',
-					controller: 'timerController'
-				}).
-				otherwise({
-					redirectTo: '/'
-				});
+app.config(['$locationProvider','$httpProvider',
+	function ($locationProvider,$httpProvider){
 		$locationProvider.html5Mode(true);
 
 		$httpProvider.defaults.useXDomain = true;
@@ -28,7 +16,8 @@ app.controller('viewController',function ($scope,$http, apiURI){
 	console.log(' request running');
 })
 
-app.controller('apiController',function ($scope,$http,$cookies, apiURI){
+app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiURI){
+
 	$scope.timerJson = function(){
 		$http({
 			url:apiURI+'/timer/',
@@ -48,6 +37,21 @@ app.controller('apiController',function ($scope,$http,$cookies, apiURI){
 		$scope.current = timerData;
 	}
 
+	$scope.getUser = function (){
+		$http({
+			url: apiURI + '/user/',
+			method:'GET',
+			headers:{'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }
+		}).
+		success(function (data){
+			$cookies.ownerID = data[0].id;
+			console.log(data);
+		}).
+		error(function (err){
+			console.log('User request failed',err);
+		})
+	}
+
 	$scope.login = function (loginData){
 		$http({
 			url:apiURI+'/api-token-auth/',
@@ -58,41 +62,93 @@ app.controller('apiController',function ($scope,$http,$cookies, apiURI){
 		success(function (data){
 			console.log('Login Request Successed!', data);
 			$cookies.AuthToken = data.token;
+			$scope.getUser();
+			window.location.reload();
 		}).
 		error(function (err){
 			console.log('Login Request FAILED!', err);
 		})
 	}
 
-})
+	$scope.logout = function (){
+		$cookieStore.remove('AuthToken');
+		window.location.reload();
+	}
 
-app.controller('timerController', function ($scope,$http,$cookies, apiURI) {
-    $scope.timerRunning = false;
-    $scope.timerOwner = {'owner': 2}
-    
+	$scope.checkLogin = function (){
+		if($cookies.AuthToken){
+			$scope.authStatus = true;
+		}else{
+			$scope.authStatus = false;
+		}
+	}
+
+})	
+
+
+app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
+
+    $scope.init = function (value){
+    	$scope.timer_type = 'ST';
+    	$scope.timerRunning = false;
+    }
+
+    $scope.setTimer = function (value){
+    	$scope.timer_type = value;
+    }
+
     $scope.startTimer = function (){
+    	alert($scope.timer_type);
         $http({
         	url: apiURI+'/timer/',
-        	data: $scope.timerOwner,
+        	data: {'owner': $cookies.ownerID,'types': $scope.timer_type},
         	method:'POST',
         	headers : {'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }
         }).
         success(function (data){
         	console.log('Timer request successed.', data);
-
+        	$cookies.timerID = data.id;
 	        $scope.$broadcast('timer-start');
 	        $scope.timerRunning = true;	
         }).
-        error( function (data){
-        	console.log('Timer request failed.');
+        error( function (err){
+        	console.log('Timer request failed.',err);
+        	alert(err['detail']);
         })
     }
+
     $scope.resetTimer = function() {
-        $scope.$broadcast('timer-reset');
-        $scope.timerRunning = false;
+    	$http({
+    		url: apiURI + '/timer/check/' + $cookies.timerID + '/',
+    		method: 'PUT',
+    		data:{},
+    		headers : {'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }
+    	}).
+    	success(function (data){
+    		console.log('Timer reset request successed', data);
+ 		    $scope.$broadcast('timer-reset');
+        	$scope.timerRunning = false;
+    	}).
+    	error( function (data){
+    		console.log('Timer reset failed!!');
+    	})
     }
+    
     $scope.$on('timer-stopped', function (event, data){
-        console.log('Timer Stopped - data = ', data);
+        $http({
+    		url: apiURI + '/timer/check/' + $cookies.timerID + '/',
+    		method: 'PUT',
+    		data:{},
+    		headers : {'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }
+    	}).
+    	success(function (data){
+    		console.log('Timer done request successed', data);
+ 		    $scope.$broadcast('timer-reset');
+ 		    $scope.timerRunning = false;
+    	}).
+    	error( function (data){
+    		console.log('Timer done failed!!');
+    	})
     });
     
 });
