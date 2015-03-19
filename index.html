@@ -25,6 +25,7 @@
     <script src="js/angular-timer.min.js"></script>
 
 
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -41,111 +42,96 @@
         <div class="container">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
-                <a class="navbar-brand" href="/">Pomegranate</a>
+                <a class="navbar-logo" href="/">POMEGRANATE</a>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 
                 <div data-ng-controller="apiController" data-ng-init="checkLogin()">
                 
-                <ul class="nav navbar-nav pull-right">
-                    <li ng-show="!authStatus" class="ng-hide">
-                        <a href="#" data-toggle="modal" data-target=".bs-login-modal">Login</a>
-                    </li>
+                    <ul class="nav navbar-nav pull-right">
+                        <li ng-show="!authStatus" class="ng-hide">
+                             <form role="form" ng-submit="login">
+                                <div class="login-input">
+                                    <input class="form-control" ng-model="loginData.username" placeholder="Enter User Name">
+                                </div>
 
-                    <li ng-show="authStatus" class="ng-hide">
-                        <a href="#" ng-click="logout()" >Logout</a>
-                    </li>
-                </ul>
+                                <div class="login-input">
+                                    <input class="form-control" type="password" ng-model="loginData.password" placeholder="Enter Password">
+                                </div>
+
+                                <div class="login-submit">
+                                    <button type="submit" ng-click="login(loginData)" class="btn btn-default"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> LOGIN</button>
+                                </div>
+                            </form>
+                        </li>
+
+                        <li ng-show="authStatus" class="ng-hide">
+                            <div class="login-submit">
+                                <button type="button" ng-click="logout()" class="btn btn-default"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span> LOGOUT</button>
+                            </div>
+                        </li>
+                    </ul>
+                
                 </div>
-            </div>
+
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
+
+
     <!-- Page Content -->
-    <div class="container">
-
-        <div class="row">
-            <div class="col-md-4 hidden-sm hidden-xs bg-warning">
-                Over1
+    <div class="container body-container col-md-6 col-lg-8 col-sm-12 col-xs-12 col-md-offset-3 col-lg-offset-2">
+        <div class="col-lg-3 visible-lg">
+            <div class="brand-img text-center">
+                <img src="../pomogranate_vector.jpg" alt="pomogranate logo"/>
             </div>
-            <div class="col-md-6 bg-info">
-                <!-- ANGULAR VIEW -->
-                <div data-ng-controller="timerController" data-ng-init="init()">
-                    <div class="timer-select">
-                        <button ng-click="setTimer('ST')" ng-disabled="timerRunning">Study</button>
-                        <button ng-click="setTimer('SB')" ng-disabled="timerRunning">Short Break</button>
-                        <button ng-click="setTimer('LB')" ng-disabled="timerRunning">Long Break</button>
-                    </div>
-                    <div class="timer-box">
-                        <div ng-switch on="timer_type">
-                            <div ng-switch-when="ST">
-                                <timer countdown="1500" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
-                            </div>
-                            <div ng-switch-when="SB">
-                                <timer countdown="300" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
-                            </div>
-                            <div ng-switch-when="LB">
-                                <timer countdown="1800" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
-                            </div>
-                        </div>
+            <div class="brand-text text-center">
+                <h1>USE POMEGRANATE</h1>
+                <p>AND</p>
+                <h3>SAVE YOUR TIME</h3>
+            </div>
+        </div>
+        <div class="col-sm-12 col-lg-6 col-md-12 col-md-offset-0" data-ng-controller="timerController" data-ng-init="init()">
+            <div class="timer-top-area col-sm-12 col-md-12 text-center">
+                <button type="button" class="btn btn-warning" ng-click="setTimer('ST')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> WORK TIME!</button>
+                <button type="button" class="btn btn-warning" ng-click="setTimer('SB')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span> SHORT BREAK</button>
+                <button type="button" class="btn btn-warning" ng-click="setTimer('LB')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span> LONG BREAK</button>
+            </div>
 
-                        <button ng-click="startTimer()" ng-hide="timerRunning">Start Timer</button>
-                        <button ng-click="resetTimer()" ng-hide="!timerRunning">Reset Timer</button>
+            <div class="timer-content-area col-sm-12 col-md-12">
+                <div ng-switch on="timer_type">
+                    <div ng-switch-when="ST">
+                        <timer countdown="1500" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
                     </div>
-                    
-                    <div ng-controller="apiController">
-                    <button ng-click="timerJson()">GET Timer</button>
-                    {{timerData}}
+                    <div ng-switch-when="SB">
+                        <timer countdown="300" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
+                    </div>
+                    <div ng-switch-when="LB">
+                        <timer countdown="1800" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
                     </div>
                 </div>
             </div>
-            <div class="col-md-2 hidden-sm hidden-xs bg-success">
-                over2
-            </div>
-        
-            
+            <div class="timer-bottom-area col-sm-12 col-md-12">
+                <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="startTimer()" ng-hide="timerRunning">Start Timer</button>
+                <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="resetTimer()" ng-hide="!timerRunning">Reset Timer</button>
+            </div> 
+
+            Timer set TEST 
+            <button type="button" class="btn btn-info" ng-click="remainingTimer(5)">TImer GET </button> 
+            <!-- TODO : ngRepeat -->
+            <timer countdown="get_timer()" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
         </div>
-        <!-- /.row -->
 
     </div>
     <!-- /.container -->
 
     <!-- jQuery Version 1.11.1 -->
     <script src="js/jquery.js"></script>
-
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/ui-bootstrap.js"></script>
     <script src="app.js"></script>
 
-<!-- LOGIN  -->
-<div class="modal fade bs-login-modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" ng-controller="apiController" >
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Login Form</h4>
-      </div>
-      <div class="modal-body">
-        <form role="form">
-            <div class="form-group">
-                <label>User Name</label>
-                <input class="form-control" ng-model="loginData.username" placeholder="Enter User Name">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input class="form-control" type="password" ng-model="loginData.password" placeholder="Enter Password">
-            </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-        <button type="submit" ng-click="login(loginData)" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>

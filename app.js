@@ -11,27 +11,7 @@ app.config(['$locationProvider','$httpProvider',
 
 	}]);
 
-// APP Controllers
-app.controller('viewController',function ($scope,$http, apiURI){
-	console.log(' request running');
-})
-
 app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiURI){
-
-	$scope.timerJson = function(){
-		$http({
-			url:apiURI+'/timer/',
-			method:'GET',
-			headers:{'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }	
-		}).
-		success(function(data,status,headers,config){
-			$scope.timerData = data;
-			$cookies.TimerData = data;
-		}).
-		error(function(data,status,headers,config){
-			console.log('timer request failed');
-		});
-	}
 
 	$scope.set = function (timerData){
 		$scope.current = timerData;
@@ -46,6 +26,7 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 		success(function (data){
 			$cookies.ownerID = data[0].id;
 			console.log(data);
+			window.location.reload();
 		}).
 		error(function (err){
 			console.log('User request failed',err);
@@ -63,7 +44,6 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 			console.log('Login Request Successed!', data);
 			$cookies.AuthToken = data.token;
 			$scope.getUser();
-			window.location.reload();
 		}).
 		error(function (err){
 			console.log('Login Request FAILED!', err);
@@ -87,7 +67,7 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 
 
 app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
-
+	$scope.remainingTime = 0;
     $scope.init = function (value){
     	$scope.timer_type = 'ST';
     	$scope.timerRunning = false;
@@ -97,8 +77,27 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
     	$scope.timer_type = value;
     }
 
+    $scope.get_timer = function (){
+    	return $scope.remainingTime;
+    }
+
+    $scope.remainingTimer = function (user_id){
+    	$http({
+			url:apiURI+'/timer/remaining/' + user_id + '/',
+			method:'GET',
+			headers:{'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }	
+		}).
+		success(function(data,status,headers,config){
+			$scope.remainingTime = data.remaining;
+			$cookies.remainingTime = data.remaining;
+			$scope.get_timer();
+		}).
+		error(function(data,status,headers,config){
+			console.log('timer request failed');
+		});
+    }
+
     $scope.startTimer = function (){
-    	alert($scope.timer_type);
         $http({
         	url: apiURI+'/timer/',
         	data: {'owner': $cookies.ownerID,'types': $scope.timer_type},
