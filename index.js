@@ -15,7 +15,14 @@ io.on('connection', function(socket){
 
   socket.on('login', function (data) {
     socket.broadcast.emit('new-user',data);
+
   });
+
+  socket.on('start-timer', function(time,user){
+    console.log('start '+time);
+    socket.broadcast.emit('startTimer', {'time_type':time,'username':user.username,'id':user.id});
+  });
+
   socket.on('logout', function (data) {
     socket.broadcast.emit('out-user',data);
   });

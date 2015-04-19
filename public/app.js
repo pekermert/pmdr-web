@@ -147,9 +147,9 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
         success(function (data){
         	console.log('Timer request successed.', data);
         	$cookies.timerID = data.id;
-        	$scope.getUser2();
+        	$scope.getUser2($scope.timer_type);
 	        $scope.$broadcast('timer-start');
-	        $scope.timerRunning = true;	
+	        $scope.timerRunning = true;
         }).
         error( function (err){
         	console.log('Timer request failed.',err);
@@ -191,7 +191,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
     	})
     });
 
-	$scope.getUser2 = function (){
+	$scope.getUser2 = function (timer_type){
 		$http({
 			url: apiURI + '/user/',
 			method:'GET',
@@ -199,6 +199,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
 		}).
 		success(function (data){
 			$cookies.ownerID = data[0].id;
+			socket.emit('start-timer', $scope.timer_type,data[0]);
 			console.log(data);
 		}).
 		error(function (err){

@@ -1,9 +1,16 @@
 
 //var cd = new (newTimer('cd'));
-function newTimer(cd_name,user_id,objc) {
+function newTimer(cd_name,type) {
+    if (type == 'SB'){
+        var currentTime = 30000;
+    }else if(type == 'LB'){
+        var currentTime = 180000;
+    }else if(type == 'ST'){
+        var currentTime = 150000;
+    }
     var $countdown,
-        incrementTime = 70,
-        currentTime = 300,
+        incrementTime = 100,
+
         updateTimer = function() {
             $countdown.html(formatTime(currentTime));
             if (currentTime == 0) {
