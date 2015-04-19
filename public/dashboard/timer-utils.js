@@ -1,0 +1,33 @@
+
+//var cd = new (newTimer('cd'));
+function newTimer(cd_name,user_id,objc) {
+    var $countdown,
+        incrementTime = 70,
+        currentTime = 300,
+        updateTimer = function() {
+            $countdown.html(formatTime(currentTime));
+            if (currentTime == 0) {
+                $countdown.html('IDLE');
+                return;
+            }
+            currentTime -= incrementTime / 10;
+            if (currentTime < 0) currentTime = 0;
+        },
+        init = function(cd_name) {
+            $countdown = $('#'+ cd_name);
+            $(cd_name).Timer = $.timer(updateTimer, incrementTime, true);
+        };
+    $(init(cd_name));
+}
+
+function pad(number, length) {
+    var str = '' + number;
+    while (str.length < length) {str = '0' + str;}
+    return str;
+}
+function formatTime(time) {
+    var min = parseInt(time / 6000),
+        sec = parseInt(time / 100) - (min * 60);
+        //hundredths = pad(time - (sec * 100) - (min * 6000), 2);
+    return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2); //+ ":" + hundredths;
+}

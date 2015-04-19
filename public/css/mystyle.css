@@ -1,12 +1,12 @@
 .clearfix{clear:both;display: block;}
 @font-face {
     font-family: paragon;
-    src: url(/fonts/ParagonBlack.ttf);
+    src: url(/public/fonts/ParagonBlack.ttf);
     font-weight: bold;
 }
 @font-face {
     font-family: paragon_bold;
-    src: url(/fonts/ParagonMedium.ttf);
+    src: url(/public/fonts/ParagonMedium.ttf);
 }
 body {
         padding-top: 70px;
@@ -68,6 +68,12 @@ body {
 	padding:5px;
 	float:left;
 	margin:4px;
+}
+.study-mode {
+	background-color: #a10 !important;
+}
+.relax-mode {
+	background-color: green !important;
 }
 .dash-item span.name { 
 	font-size: 25px;

@@ -19,10 +19,6 @@
     <script src="./public/js/angular.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular-route.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular-cookies.js"></script> 
-    <script src="./public/js/moment.js"></script>
-    <script src="./public/js/humanize-duration.js"></script>
-    <!-- TIMER -->
-    <script src="./public/js/angular-timer.min.js"></script>
 </head>
 
 <body>
@@ -39,36 +35,36 @@
         <!-- /.container -->
     </nav>
 
-    <div id="dash">
-        <div class='dash-item' data-i="user-1">
-            <span class="name">Name</span>
-            <span class="status">IDLE</span>
-        </div>
-    </div>
+    <div id="dash"></div>
 
-    <!-- jQuery Version 1.11.1 -->
-    <script src="./public/js/jquery.js"></script>
+    <!-- jQuery Version 1.8.3 -->
+    <script src="./public/js/jquery.min.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="./public/js/bootstrap.min.js"></script>
     <script src="./public/js/ui-bootstrap.js"></script>
     <script src="./public/app.js"></script>
+    <script src="./public/dashboard/jquery.timer.js"></script>
+    <script src="./public/dashboard/timer-utils.js"></script>
 
 <script src="/socket.io/socket.io.js"></script>
-<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script src="/public/js/socket.io-1.2.0.js"></script>
 <script>
-  var socket = io();
-  
+    var socket = io();
+    var objc = {};
+
     socket.on('new-user', function(data){
-        $('<div class="dash-item" data-i="user-'+data.id+'"><span class="name">'+data.username+'</span><span class="status">IDLE</span></div>').appendTo('#dash');
+    var userName = data.username;
+    var userID = data.id;
+    $('<div class="dash-item relax-mode" data-i="user-'+userID+'"><span class="name">'+userName+'</span><span class="status"><span id="'+userName+'">00:00</span></span></div>').appendTo('#dash');
+    
+        objc[userName] = new( newTimer(userName,userID,objc) );
+    
     });
 
     socket.on('out-user', function(data){
         $('.dash-item[data-i="user-'+data+'"]').remove();
     });
 
-    socket.on('disconnect', function(){
-    	$('<li>User cikis yapti</li>').appendTo('#dash');
-    });
 </script>
 
 </body>
