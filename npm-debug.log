@@ -1,0 +1,77 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node',
+1 verbose cli   '/usr/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   '--save',
+1 verbose cli   'socketio' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.38
+4 verbose node symlink /usr/bin/node
+5 verbose readDependencies using package.json deps
+6 verbose cache add [ 'socketio', null ]
+7 verbose cache add name=undefined spec="socketio" args=["socketio",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: 'socketio',
+8 verbose parsed url   path: 'socketio',
+8 verbose parsed url   href: 'socketio' }
+9 silly lockFile be461470-socketio socketio
+10 verbose lock socketio /home/pmoksuz/.npm/be461470-socketio.lock
+11 silly lockFile be461470-socketio socketio
+12 silly lockFile be461470-socketio socketio
+13 verbose addNamed [ 'socketio', '' ]
+14 verbose addNamed [ null, '*' ]
+15 silly lockFile fa004f70-socketio socketio@
+16 verbose lock socketio@ /home/pmoksuz/.npm/fa004f70-socketio.lock
+17 silly addNameRange { name: 'socketio', range: '*', hasData: false }
+18 verbose request where is /socketio
+19 verbose request registry https://registry.npmjs.org/
+20 verbose request id 6d03870a6b92a60a
+21 verbose url raw /socketio
+22 verbose url resolving [ 'https://registry.npmjs.org/', './socketio' ]
+23 verbose url resolved https://registry.npmjs.org/socketio
+24 verbose request where is https://registry.npmjs.org/socketio
+25 info trying registry request attempt 1 at 21:03:32
+26 http GET https://registry.npmjs.org/socketio
+27 http 404 https://registry.npmjs.org/socketio
+28 silly registry.get cb [ 404,
+28 silly registry.get   { date: 'Sat, 18 Apr 2015 18:03:33 GMT',
+28 silly registry.get     server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+28 silly registry.get     etag: '"5RGC7F7X0Z6GAGOGHVGFIPIJR"',
+28 silly registry.get     'content-type': 'application/json',
+28 silly registry.get     'cache-control': 'max-age=0',
+28 silly registry.get     'content-length': '436',
+28 silly registry.get     'accept-ranges': 'bytes',
+28 silly registry.get     via: '1.1 varnish',
+28 silly registry.get     age: '0',
+28 silly registry.get     'x-served-by': 'cache-lhr6331-LHR',
+28 silly registry.get     'x-cache': 'MISS',
+28 silly registry.get     'x-cache-hits': '0',
+28 silly registry.get     'x-timer': 'S1429380213.271044,VS0,VE357',
+28 silly registry.get     vary: 'Accept',
+28 silly registry.get     'keep-alive': 'timeout=10, max=50',
+28 silly registry.get     connection: 'Keep-Alive' } ]
+29 silly lockFile fa004f70-socketio socketio@
+30 silly lockFile fa004f70-socketio socketio@
+31 error 404 Not Found
+31 error 404
+31 error 404 'socketio' is not in the npm registry.
+31 error 404 You should bug the author to publish it
+31 error 404 It was specified as a dependency of 'pmdr-web'
+31 error 404
+31 error 404 Note that you can also install from a
+31 error 404 tarball, folder, or http url, or git url.
+32 error System Linux 3.16.0-34-generic
+33 error command "/usr/bin/node" "/usr/bin/npm" "install" "--save" "socketio"
+34 error cwd /home/pmoksuz/tasarim/pmdr-web
+35 error node -v v0.10.38
+36 error npm -v 1.4.28
+37 error code E404
+38 verbose exit [ 1, true ]

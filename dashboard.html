@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="app">
+
+<head>
+    <base href="/">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Pomodoro Timer</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="./public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="./public/css/mystyle.css" rel="stylesheet">
+
+    <!-- ANGULAR JS -->
+    <script src="./public/js/angular.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular-route.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular-cookies.js"></script> 
+    <script src="./public/js/moment.js"></script>
+    <script src="./public/js/humanize-duration.js"></script>
+    <!-- TIMER -->
+    <script src="./public/js/angular-timer.min.js"></script>
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <!-- a class="navbar-logo" href="/">POMEGRANATE</a-->
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <div id="dash">
+        <div class='dash-item' data-i="user-1">
+            <span class="name">Name</span>
+            <span class="status">IDLE</span>
+        </div>
+    </div>
+
+    <!-- jQuery Version 1.11.1 -->
+    <script src="./public/js/jquery.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./public/js/bootstrap.min.js"></script>
+    <script src="./public/js/ui-bootstrap.js"></script>
+    <script src="./public/app.js"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+<script>
+  var socket = io();
+  
+    socket.on('new-user', function(data){
+        $('<div class="dash-item" data-i="user-'+data.id+'"><span class="name">'+data.username+'</span><span class="status">IDLE</span></div>').appendTo('#dash');
+    });
+
+    socket.on('out-user', function(data){
+        $('.dash-item[data-i="user-'+data+'"]').remove();
+    });
+
+    socket.on('disconnect', function(){
+    	$('<li>User cikis yapti</li>').appendTo('#dash');
+    });
+</script>
+
+</body>
+</html>

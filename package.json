@@ -1,0 +1,25 @@
+{
+  "name": "pmdr-web",
+  "version": "1.0.0",
+  "description": "Pomodoro Client and Monitor",
+  "main": "angular.min.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pekermert/pmdr-web.git"
+  },
+  "keywords": [
+    "pmdr"
+  ],
+  "author": "Peker Mert Oksuz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pekermert/pmdr-web/issues"
+  },
+  "homepage": "https://github.com/pekermert/pmdr-web",
+  "dependencies": {
+    "socket.io": "^1.3.5"
+  }
+}
