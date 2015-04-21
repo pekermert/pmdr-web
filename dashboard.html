@@ -68,6 +68,15 @@
 
         new( newTimer(userName,time_type) );
     });
+
+    socket.on('resetTimer', function(data){
+        var userID = data.id;
+        var userName = data.username;
+        $('.dash-item[data-i="user-'+userID+'"]').remove();
+        $('<div class="dash-item relax-mode" data-i="user-'+userID+'"><span class="name">'+userName+
+'</span><span class="status"><span id="'+userName+'">IDLE</span></span></div>').appendTo('#dash'); 
+    });
+
     socket.on('out-user', function(data){
         $('.dash-item[data-i="user-'+data+'"]').remove();
     });

@@ -23,6 +23,11 @@ io.on('connection', function(socket){
     socket.broadcast.emit('startTimer', {'time_type':time,'username':user.username,'id':user.id});
   });
 
+  socket.on('reset-timer', function(user){
+    console.log('reset '+user);
+    socket.broadcast.emit('resetTimer', user);
+  });
+
   socket.on('logout', function (data) {
     socket.broadcast.emit('out-user',data);
   });

@@ -1,6 +1,6 @@
 var app = angular.module('app', ['ngCookies','timer']);
-//app.value('apiURI', 'http://127.0.0.1:8000');
-app.value('apiURI', 'http://192.168.2.7:3000');
+app.value('apiURI', 'http://127.0.0.1:8000');
+//app.value('apiURI', 'http://192.168.2.7:3000');
 
 // APP Configurations
 app.config(['$locationProvider','$httpProvider',
@@ -33,6 +33,7 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 		}).
 		success(function (data){
 			$cookies.ownerID = data[0].id;
+			$cookies.ownerName = data[0].username;
 			$scope.dashBoard_login(data);
 			window.location.reload();
 		}).
@@ -43,7 +44,7 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 
 	$scope.statics = function(){
 		$http({
-			url:apiURI+'/statics/' + $cookies.ownerID +'/',
+			url:apiURI+'/statics/' + $cookies.ownerID +'/?status=DN',
 			method:'GET',
 			headers:{'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }
 		}).
@@ -107,6 +108,7 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 
 app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
 	$scope.remainingTime = 0;
+	$scope.userObject = {'username':$cookies.ownerName,'id':$cookies.ownerID};
 
 	$scope.init = function (value){
     	$scope.timer_type = 'ST';
@@ -147,7 +149,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
         success(function (data){
         	console.log('Timer request successed.', data);
         	$cookies.timerID = data.id;
-        	$scope.getUser2($scope.timer_type);
+        	socket.emit('start-timer', $scope.timer_type,$scope.userObject);
 	        $scope.$broadcast('timer-start');
 	        $scope.timerRunning = true;
         }).
@@ -168,6 +170,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
     		console.log('Timer reset request successed', data);
  		    $scope.$broadcast('timer-reset');
         	$scope.timerRunning = false;
+        	socket.emit('reset-timer', $scope.userObject);
     	}).
     	error( function (data){
     		console.log('Timer reset failed!!');
@@ -191,19 +194,4 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
     	})
     });
 
-	$scope.getUser2 = function (timer_type){
-		$http({
-			url: apiURI + '/user/',
-			method:'GET',
-			headers:{'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }
-		}).
-		success(function (data){
-			$cookies.ownerID = data[0].id;
-			socket.emit('start-timer', $scope.timer_type,data[0]);
-			console.log(data);
-		}).
-		error(function (err){
-			console.log('User request failed',err);
-		})
-	}
 });
