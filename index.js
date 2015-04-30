@@ -1,13 +1,24 @@
-var express = require('express'),app = express();
+var express = require('express')
+  , cors = require('cors')
+  , app = express();
+ 
+app.use(cors());
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-
 app.use(express.static(__dirname));
 
-app.get('/', function(req, res){
+app.all('/*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "GET, POST","PUT");
+  next();
+ 
+});
+
+app.get('/', function(req, res, next){
   res.sendFile(__dirname + '/index.html');
 });
-app.get('/dashboard', function(req, res){
+app.get('/dashboard', function(req, res, next){
   res.sendFile(__dirname + '/dashboard.html');
 });
 
