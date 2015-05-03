@@ -13,10 +13,17 @@ app.config(['$locationProvider','$httpProvider',
 	}]);
 
 app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiURI){
+	$scope.init = function (value){
+    	$scope.start_page = 'login';
+    }
 
 	$scope.set = function (timerData){
 		$scope.current = timerData;
 	}
+
+    $scope.setFormSw = function (value){
+    	$scope.start_page = value;
+    }
 
 	$scope.dashBoard_login = function(data){
 		socket.emit('login', data[0]);

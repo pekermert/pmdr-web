@@ -41,19 +41,7 @@
                 
                     <ul class="nav navbar-nav">
                         <li ng-show="!authStatus" class="ng-hide">
-                             <form role="form" ng-submit="login">
-                                <div class="login-input col-sm-2 col-md-4 col-lg-4">
-                                    <input class="form-control" ng-model="loginData.username" placeholder="Enter User Name">
-                                </div>
-
-                                <div class="login-input col-sm-2 col-md-4 col-lg-4">
-                                    <input class="form-control" type="password" ng-model="loginData.password" placeholder="Enter Password">
-                                </div>
-
-                                <div class="login-submit col-sm-2 col-md-2 col-lg-2">
-                                    <button type="submit" ng-click="login(loginData)" class="btn btn-default"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> LOGIN</button>
-                                </div>
-                            </form>
+                             
                         </li>
 
                         <li ng-show="authStatus" class="ng-hide">
@@ -85,76 +73,99 @@
                 <h3>SAVE YOUR TIME</h3>
             </div>
         </div>
-        <div class="col-sm-12 col-lg-6 col-md-12 col-md-offset-0" data-ng-controller="timerController" data-ng-init="init()">
-            <div class="timer-top-area col-sm-12 col-md-12 text-center">
-                <button type="button" class="btn btn-warning" ng-click="setTimer('ST')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> WORK TIME!</button>
-                <button type="button" class="btn btn-warning" ng-click="setTimer('SB')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span> SHORT BREAK</button>
-                <button type="button" class="btn btn-warning" ng-click="setTimer('LB')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span> LONG BREAK</button>
+        <div data-ng-controller="apiController" data-ng-init="checkLogin()">
+            <div ng-show="authStatus" class="ng-hide">
+                <div class="col-sm-12 col-lg-6 col-md-12 col-md-offset-0" data-ng-controller="timerController" data-ng-init="init()">
+                    <div class="timer-top-area col-sm-12 col-md-12 text-center">
+                        <button type="button" class="btn btn-warning" ng-click="setTimer('ST')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> WORK TIME!</button>
+                        <button type="button" class="btn btn-warning" ng-click="setTimer('SB')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span> SHORT BREAK</button>
+                        <button type="button" class="btn btn-warning" ng-click="setTimer('LB')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-sunglasses" aria-hidden="true"></span> LONG BREAK</button>
+                    </div>
+
+                    <div class="timer-content-area col-sm-12 col-md-12">
+                        <div ng-switch on="timer_type">
+                            <div ng-switch-when="ST">
+                                <timer countdown="1500" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
+                            </div>
+                            <div ng-switch-when="SB">
+                                <timer countdown="300" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
+                            </div>
+                            <div ng-switch-when="LB">
+                                <timer countdown="1800" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timer-bottom-area col-sm-12 col-md-12">
+                        <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="startTimer()" ng-hide="timerRunning">Start Timer</button>
+                        <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="resetTimer()" ng-hide="!timerRunning">Reset Timer</button>
+                    </div> 
+                </div>
             </div>
+            <div ng-show="!authStatus" class="ng-hide">
+                <button type="button" class="btn btn-warning" ng-click="setFormSw('login')" ><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> I KNOW U</button>
+                <button type="button" class="btn btn-primary" ng-click="setFormSw('register')"><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span> JOIN US</button>
+                <div ng-switch on="start_page" data-ng-init="init()">
+                    <div ng-switch-when="login" class="col-lg-6 col-md-6">
+                        <h2>User Login Form</h2>
+                        <form role="form" ng-submit="login" class="col-lg-6 col-md-6">
+                            <div class="form-group">
+                                <label for="email">User Name:</label>
+                                <input class="form-control" ng-model="loginData.username" placeholder="Enter User Name">
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Password:</label>
+                                <input class="form-control" type="password" ng-model="loginData.password" placeholder="Enter Password">
+                            </div>
+                            <button type="submit" ng-click="login(loginData)" class="btn btn-success"><span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> LOGIN</button>
+                        </form>
+                    </div>
+                    <div ng-switch-when="register" class="col-lg-6 col-md-6">
+                        <h2>User Registeration Form</h2>
+                        <form role="form" ng-submit="register" class="col-lg-6 col-md-6">
+                        <div class="form-group">
+                            <label for="email">First Name:</label>
+                            <input class="form-control" ng-model="CreateUserData.first_name" placeholder="Enter First Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Last Name:</label>
+                            <input class="form-control" ng-model="CreateUserData.last_name" placeholder="Enter Last Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">User Name:</label>
+                            <input class="form-control" ng-model="CreateUserData.username" placeholder="Enter User Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input class="form-control" ng-model="CreateUserData.email" placeholder="Enter Email">
+                        </div>
 
-            <div class="timer-content-area col-sm-12 col-md-12">
-                <div ng-switch on="timer_type">
-                    <div ng-switch-when="ST">
-                        <timer countdown="1500" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
-                    </div>
-                    <div ng-switch-when="SB">
-                        <timer countdown="300" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
-                    </div>
-                    <div ng-switch-when="LB">
-                        <timer countdown="1800" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
+                        <div class="form-group">
+                            <label for="email">Password:</label>
+                            <input class="form-control" type="password" ng-model="CreateUserData.password" placeholder="Enter Password">
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" ng-click="register(CreateUserData)" class="btn btn-default">
+                            <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Register
+                            </button>
+                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
-            <div class="timer-bottom-area col-sm-12 col-md-12">
-                <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="startTimer()" ng-hide="timerRunning">Start Timer</button>
-                <button type="button" class="btn btn-primary btn-lg btn-block" ng-click="resetTimer()" ng-hide="!timerRunning">Reset Timer</button>
-            </div> 
-
-            <!--
-            Timer set TEST 
-            <button type="button" class="btn btn-info" ng-click="remainingTimer()">TImer GET </button> 
-             TODO : ngRepeat 
-            <timer countdown="get_timer()" interval="1000" autostart="false">{{minutes}}:{{seconds}}</timer>
-            -->
-        </div>
-        <div data-ng-controller="apiController" class="col-lg-3 visible-lg">
-            <form role="form" ng-submit="register">
-                <div class="login-input">
-                    <input class="form-control" ng-model="CreateUserData.first_name" placeholder="Enter First Name">
-                </div>
-                <div class="login-input">
-                    <input class="form-control" ng-model="CreateUserData.last_name" placeholder="Enter Last Name">
-                </div>
-                <div class="login-input">
-                    <input class="form-control" ng-model="CreateUserData.username" placeholder="Enter User Name">
-                </div>
-                <div class="login-input">
-                    <input class="form-control" ng-model="CreateUserData.email" placeholder="Enter Email">
-                </div>
-
-                <div class="login-input">
-                    <input class="form-control" type="password" ng-model="CreateUserData.password" placeholder="Enter Password">
-                </div>
-
-                <div class="login-submit">
-                    <button type="submit" ng-click="register(CreateUserData)" class="btn btn-default">
-                        <span class="glyphicon glyphicon-log-in" aria-hidden="true"></span> Register
-                    </button>
-                </div>
-            </form>
         </div>
 
-        <div class = "col-lg-12 col-md-12 col-sm-12" data-ng-controller="apiController" data-ng-init='statics()'>
+        <div data-ng-controller="apiController" data-ng-init="statics()" class="col-lg-3 visible-lg">
             <h1>Daily Records<small> today {{staticsData.length}} </small></h1>
-                <div class="table-responsive">
-                  <table class="table">
-                    <tr ng-repeat="st in staticsData">
-                        <td class="active">{{st.on_date}}</td>
-                        <td class="active">{{st.types}}</td>
-                        <td class="active">{{st.status}}</td>
-                    </tr>
-                  </table>
-                </div>
+            <div class="table-responsive">
+              <table class="table">
+                <tr ng-repeat="st in staticsData">
+                    <td class="active">{{st.on_date}}</td>
+                    <td class="active">{{st.types}}</td>
+                    <td class="active">{{st.status}}</td>
+                </tr>
+              </table>
+            </div>
         </div>
     </div>
     <!-- /.container -->
