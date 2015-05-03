@@ -1,6 +1,6 @@
 var app = angular.module('app', ['ngCookies','timer']);
 //app.value('apiURI', 'http://127.0.0.1:8000');
-app.value('apiURI', 'http://192.168.2.5:3310');
+app.value('apiURI', 'http://192.168.2.5:8000');
 
 // APP Configurations
 app.config(['$locationProvider','$httpProvider',

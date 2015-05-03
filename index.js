@@ -1,27 +1,12 @@
 var express = require('express')
-  , app = express();
- 
+var cors = require('cors');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-app.use(express.static(__dirname));
+var request = require('request');
 
-// Enables CORS
-var enableCORS = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', '*');
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
- 
-    // intercept OPTIONS method
-    if ('OPTIONS' == req.method) {
-      res.send(200);
-    }
-    else {
-      next();
-    }
-};
- 
-// enable CORS!
-app.use(enableCORS);
+app.use(express.static(__dirname));
+app.use(cors());
 
 app.get('/', function(req, res, next){
   res.sendFile(__dirname + '/index.html');
