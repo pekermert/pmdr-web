@@ -1,9 +1,10 @@
-var express = require('express')
+var express = require('express');
 var cors = require('cors');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var request = require('request');
+var gpio = require('rpi-gpio');
+
 
 app.use(express.static(__dirname));
 app.use(cors());
@@ -38,6 +39,34 @@ io.on('connection', function(socket){
 
 });
 
+///RASPBERRY GPIO///
+var pin   = 7;
+var delay = 2000;
+var count = 0;
+var max   = 3;
+gpio.setup(pin, gpio.DIR_OUT, on);
+
+function on() {
+    if (count >= max) {
+        gpio.destroy(function() {
+            console.log('Closed pins, now exit');
+            return process.exit(0);
+        });
+        return;
+    }
+ 
+    setTimeout(function() {
+        gpio.write(pin, 1, off);
+        count += 1;
+    }, delay);
+}
+ 
+function off() {
+    setTimeout(function() {
+        gpio.write(pin, 0, on);
+    }, delay);
+}
+/////////// HTTP/////////////
 http.listen(3300, function(){
   console.log('listening on *:3300');
 });
