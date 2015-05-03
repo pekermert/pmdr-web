@@ -3,7 +3,7 @@ var cors = require('cors');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-var gpio = require('rpi-gpio');
+var gpio = require("pi-gpio");
 
 
 app.use(express.static(__dirname));
@@ -40,7 +40,6 @@ io.on('connection', function(socket){
 });
 
 ///RASPBERRY GPIO///
-var gpio = require("pi-gpio");
  
 gpio.open(16, "output", function(err) {     // Open pin 16 for output 
     gpio.write(16, 1, function() {          // Set pin 16 high (1) 
