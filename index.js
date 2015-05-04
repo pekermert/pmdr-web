@@ -38,15 +38,9 @@ io.on('connection', function(socket){
 });
 
 ///RASPBERRY GPIO///
-var wpi = require('wiring-pi');
-wpi.setup();
-var pin = 4; //Change pin number according to your wiring
-wpi.pinMode(pin, wpi.OUTPUT);
-var value = 1;
-setInterval(function() {
-  wpi.digitalWrite(pin, value);
-  value = +!value;
-}, 500);
+
+
+
 /////////// HTTP/////////////
 http.listen(3300, function(){
   console.log('listening on *:3300');
