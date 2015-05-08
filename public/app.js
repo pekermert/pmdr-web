@@ -1,6 +1,6 @@
 var app = angular.module('app', ['ngCookies','timer']);
 //app.value('apiURI', 'http://127.0.0.1:8000');
-app.value('apiURI', 'http://192.168.2.5:8000/api-v1');
+app.value('apiURI', 'http://192.168.2.11:8000/api-v1');
 
 // APP Configurations
 app.config(['$locationProvider','$httpProvider',
@@ -115,7 +115,8 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 
 app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
 	$scope.remainingTime = 0;
-	$scope.userObject = {'username':$cookies.ownerName,'id':$cookies.ownerID};
+	$scope.pinArry = {1:7,7:11,6:13}
+	$scope.userObject = {'username':$cookies.ownerName,'id':$cookies.ownerID,'pin':$scope.pinArry[$cookies.ownerID]};
 
 	$scope.init = function (value){
     	$scope.timer_type = 'ST';
@@ -156,7 +157,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
         success(function (data){
         	console.log('Timer request successed.', data);
         	$cookies.timerID = data.id;
-        	socket.emit('start-timer', $scope.timer_type,$scope.userObject);
+		socket.emit('start-timer', $scope.timer_type,$scope.userObject);
 	        $scope.$broadcast('timer-start');
 	        $scope.timerRunning = true;
         }).
