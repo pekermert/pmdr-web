@@ -13,7 +13,7 @@ app.config(['$locationProvider','$httpProvider',
 	}]);
 
 app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiURI){
-	$scope.init = function (value){
+	$scope.init = function (){
     	$scope.start_page = 'login';
     }
 
@@ -21,7 +21,7 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 		$scope.current = timerData;
 	}
 
-    $scope.setFormSw = function (value){
+    $scope.set_form_switch = function (value){
     	$scope.start_page = value;
     }
 
@@ -30,6 +30,10 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 	}
 	$scope.dashBoard_logout = function(data){
 		socket.emit('logout', data);
+	}
+
+	$scope.user_panel = function(){
+		$scope.userName = $cookies.ownerName;
 	}
 
 	$scope.getUser = function (){
@@ -41,27 +45,29 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 		success(function (data){
 			$cookies.ownerID = data[0].id;
 			$cookies.ownerName = data[0].username;
+			$scope.userName = $cookies.ownerName;
 			$scope.dashBoard_login(data);
 			window.location.reload();
 		}).
 		error(function (err){
-			console.log('User request failed',err);
+			alert('User request failed');
 		})
 	}
 
 	$scope.statics = function(){
-		$http({
-			url:apiURI+'/statics/' + $cookies.ownerID +'/?status=DN',
-			method:'GET',
-			headers:{'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }
-		}).
-		success(function (data){
-			console.log('Statics here',data);
-			$scope.staticsData = data;
-		}).
-		error(function (err){
-			console.log('Statics failed',err);
-		})
+		if($cookies.AuthToken){
+			$http({
+				url:apiURI+'/statics/' + $cookies.ownerID +'/?status=DN',
+				method:'GET',
+				headers:{'Content-Type':'application/json; charset=UTF-8','Authorization': 'JWT ' + $cookies.AuthToken }
+			}).
+			success(function (data){
+				$scope.staticsData = data;
+			}).
+			error(function (err){
+				alert('Statics failed');
+			})
+		}
 	}
 
 	$scope.register = function(CreateUserData){
@@ -72,10 +78,12 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 			headers : {'Content-Type':'application/json; charset=UTF-8' }
 		}).
 		success(function (data){
-			console.log('Register Request Successed!', data);
+			alert('Registeration Successed!');
+			window.location.reload();
 		}).
 		error(function (err){
-			console.log('Register Request FAILED!', err);
+			alert('Registeration Failed!');
+			window.location.reload();
 		})
 	}
 
@@ -87,18 +95,19 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 			headers : {'Content-Type':'application/json; charset=UTF-8' }
 		}).
 		success(function (data){
-			console.log('Login Request Successed!', data);
 			$cookies.AuthToken = data.token;
 			$scope.getUser();
+			alert('Login Successed!');
 		}).
 		error(function (err){
-			console.log('Login Request FAILED!', err);
+			alert('Login Failed!');
 		})
 	}
 
 	$scope.logout = function (){
 		$cookieStore.remove('AuthToken');
 		$scope.dashBoard_logout($cookies.ownerID);
+		alert('You are logout now.');
 		window.location.reload();
 	}
 
@@ -115,8 +124,7 @@ app.controller('apiController',function ($scope,$http,$cookies,$cookieStore,apiU
 
 app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
 	$scope.remainingTime = 0;
-	$scope.pinArry = {1:7,7:11,6:13}
-	$scope.userObject = {'username':$cookies.ownerName,'id':$cookies.ownerID,'pin':$scope.pinArry[$cookies.ownerID]};
+	$scope.userObject = {'username':$cookies.ownerName,'id':$cookies.ownerID};
 
 	$scope.init = function (value){
     	$scope.timer_type = 'ST';
@@ -143,7 +151,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
 			$scope.get_timer();
 		}).
 		error(function(data,status,headers,config){
-			console.log('timer request failed');
+			alert('timer request failed');
 		});
     }
 
@@ -157,13 +165,12 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
         success(function (data){
         	console.log('Timer request successed.', data);
         	$cookies.timerID = data.id;
-		socket.emit('start-timer', $scope.timer_type,$scope.userObject);
+			socket.emit('start-timer', $scope.timer_type,$scope.userObject);
 	        $scope.$broadcast('timer-start');
 	        $scope.timerRunning = true;
         }).
         error( function (err){
-        	console.log('Timer request failed.',err);
-        	alert(err['detail']);
+        	alert('Timer request failed.');
         })
     }
 
@@ -181,7 +188,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
         	socket.emit('reset-timer', $scope.userObject);
     	}).
     	error( function (data){
-    		console.log('Timer reset failed!!');
+    		alert('Timer reset failed!!');
     	})
     }
     
@@ -198,7 +205,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
  		    $scope.timerRunning = false;
     	}).
     	error( function (data){
-    		console.log('Timer done failed!!');
+    		alert('Timer done failed!!');
     	})
     });
 

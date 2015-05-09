@@ -5,6 +5,10 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var gpio = require('rpi-gpio');
 
+// USER ID : GPIO PIN NUMBER
+var PinArray={1:7,7:11,6:13};
+
+// EXPRESS SET
 app.use(express.static(__dirname));
 app.use(cors());
 
@@ -15,30 +19,29 @@ app.get('/dashboard', function(req, res, next){
   res.sendFile(__dirname + '/dashboard.html');
 });
 
+// SOCKET IO 
 io.on('connection', function(socket){
 
-  socket.on('login', function (data) {
+  socket.on('login', function (data){
     socket.broadcast.emit('new-user',data);
   });
 
   socket.on('start-timer', function(time,user){
-    console.log('start '+time);
     socket.broadcast.emit('startTimer', {'time_type':time,'username':user.username,'id':user.id});
-    gpio.setup(user.pin,gpio.DIR_OUT, function(){led_on(user.pin);});
- });
-
-  socket.on('reset-timer', function(user){
-    console.log('reset '+user.pin);
-    socket.broadcast.emit('resetTimer', user);
-    gpio.setup(user.pin,gpio.DIR_OUT, function(){led_off(user.pin)});
+    gpio.setup(PinArray[user.id],gpio.DIR_OUT, function(){led_on(PinArray[user.id]);});
   });
 
-  socket.on('logout', function (data) {
+  socket.on('reset-timer', function(user){
+    socket.broadcast.emit('resetTimer', user);
+    gpio.setup(PinArray[user.id],gpio.DIR_OUT, function(){led_off(PinArray[user.id])});
+  });
+
+  socket.on('logout', function (data){
     socket.broadcast.emit('out-user',data);
+    gpio.setup(PinArray[data],gpio.DIR_OUT, function(){led_off(PinArray[data])});
   });
 
 });
-
 
 ////////////GPIO/////////////
 function led_off(pin){
@@ -53,7 +56,7 @@ function led_on(pin){
 		console.log(pin+'on');
 	});
 }
-/////////// HTTP/////////////
+/////////// HTTP SERVER /////////////
 http.listen(3300, function(){
   console.log('listening on *:3300');
 });

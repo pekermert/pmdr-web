@@ -9,7 +9,7 @@ function newTimer(cd_name,type) {
         var currentTime = 150000;
     }
     var $countdown,
-        incrementTime = 100,
+        incrementTime = 80,
 
         updateTimer = function() {
             $countdown.html(formatTime(currentTime));
