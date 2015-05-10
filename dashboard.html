@@ -65,7 +65,7 @@
         var time_type = data.time_type;
         $('.dash-item[data-i="user-'+userID+'"]').remove();
         $('<div class="dash-item relax-mode" data-i="user-'+userID+'"><span class="name">'+userName+
-'</span><span class="status"><span id="'+userName+'">IDLE</span></span></div>').appendTo('#dash'); 
+' - ' + timer_type_string(time_type) + '</span><span class="status"><span id="'+userName+'">IDLE</span></span></div>').appendTo('#dash'); 
 
         new( newTimer(userName,time_type) );
     });

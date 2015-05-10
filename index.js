@@ -28,7 +28,6 @@ io.on('connection', function(socket){
 
   socket.on('start-timer', function(time,user){
     socket.broadcast.emit('startTimer', {'time_type':time,'username':user.username,'id':user.id});
-    console.log('test '+parseInt(PinArray[user.id]));
     pinNum = parseInt(PinArray[user.id]);
     gpio.setup(pinNum,gpio.DIR_OUT, function(){led_on(pinNum);});
   });

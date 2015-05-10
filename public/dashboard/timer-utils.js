@@ -38,3 +38,13 @@ function formatTime(time) {
         //hundredths = pad(time - (sec * 100) - (min * 6000), 2);
     return (min > 0 ? pad(min, 2) : "00") + ":" + pad(sec, 2); //+ ":" + hundredths;
 }
+
+function timer_type_string(type){
+    if (type == 'SB'){
+        return 'Short Break';
+    }else if(type == 'LB'){
+        return 'Long Break';
+    }else if(type == 'ST'){
+        return 'Working';
+    }
+}

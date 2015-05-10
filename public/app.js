@@ -202,6 +202,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
     	success(function (data){
     		console.log('Timer done request successed', data);
  		    $scope.$broadcast('timer-reset');
+ 		    socket.emit('reset-timer', $scope.userObject);
  		    $scope.timerRunning = false;
     	}).
     	error( function (data){
