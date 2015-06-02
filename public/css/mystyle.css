@@ -53,6 +53,7 @@ body {
 		color:#fff;
 		text-align: center;
 		font-weight: bolder;
+		min-height: 20px;
 		background: #333333;
 		font-size:5em;
 		padding-top:0.3em;
