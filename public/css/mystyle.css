@@ -14,6 +14,10 @@ body {
         /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
     }
 
+.pull-left {
+	float:left;
+	display: block;
+}
 .login-input{
 	float:left;
 	display: block;
