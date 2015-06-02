@@ -61,14 +61,8 @@
             </div>
         </div>
         <div data-ng-controller="apiController" data-ng-init="checkLogin()">
-
             <div ng-show="authStatus" class="ng-hide">
-                
                 <div class="col-sm-12 col-lg-6 col-md-12 col-md-offset-0" data-ng-controller="timerController" data-ng-init="init()">
-                <div class="timer-bottom-area col-sm-6 col-md-12 pull-left">
-                        <button type="button" class="btn btn-primary" ng-click="startTimer()" ng-disabled="timerRunning">Start Timer</button>
-                        <button type="button" class="btn btn-primary" ng-click="resetTimer()" >Reset Timer</button>
-                </div>
                     <div class="timer-top-area col-sm-12 col-md-12 text-center">
                         <button type="button" class="btn btn-warning" ng-click="setTimer('ST')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span> WORK TIME!</button>
                         <button type="button" class="btn btn-warning" ng-click="setTimer('SB')" ng-disabled="timerRunning"><span class="glyphicon glyphicon-headphones" aria-hidden="true"></span> SHORT BREAK</button>
@@ -89,7 +83,10 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                     
+                    <div class="timer-bottom-area">
+                        <button type="button" class="btn btn-primary" ng-click="startTimer()" ng-hide="timerRunning">Start Timer</button>
+                        <button type="button" class="btn btn-primary" ng-click="resetTimer()" ng-hide="!timerRunning">Reset Timer</button>
+                    </div> 
                 </div>
             </div>
             <div ng-show="!authStatus" class="ng-hide">

@@ -174,7 +174,7 @@ app.controller('timerController', function ($scope,$http,$cookies,apiURI) {
         })
     }
 
-    $scope.resetTimer = function() {
+    $scope.resetTimer = function(){
     	$http({
     		url: apiURI + '/timer/check/' + $cookies.timerID + '/',
     		method: 'PUT',
